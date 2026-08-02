@@ -60,9 +60,7 @@ pipeline {
                 sh '''
                 ssh -o StrictHostKeyChecking=no ubuntu@${APP_SERVER_IP} "
 
-                aws ecr get-login-password --region us-east-1 | \
-                docker login --username AWS \
-                --password-stdin 754895435040.dkr.ecr.us-east-1.amazonaws.com
+                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 754895435040.dkr.ecr.us-east-1.amazonaws.com
 
                 docker pull 754895435040.dkr.ecr.us-east-1.amazonaws.com/backend-repo:v1
 
@@ -74,14 +72,30 @@ pipeline {
                 docker stop frontend || true
                 docker rm frontend || true
 
-                docker run -d --name backend -p 5000:5000 \
+                docker run -d \
+                --name backend \
+                -p 5000:5000 \
+                -v /home/ubuntu/.aws:/root/.aws:ro \
                 754895435040.dkr.ecr.us-east-1.amazonaws.com/backend-repo:v1
 
-                docker run -d --name frontend -p 3000:3000 \
+                docker run -d \
+                --name frontend \
+                -p 3000:3000 \
                 754895435040.dkr.ecr.us-east-1.amazonaws.com/frontend-repo:v1
+
                 "
                 '''
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment completed successfully'
+        }
+
+        failure {
+            echo 'Deployment failed'
         }
     }
 }
