@@ -5,7 +5,6 @@ const {
 } = require("@aws-sdk/client-secrets-manager");
 
 async function getConnection() {
-
   const client = new SecretsManagerClient({
     region: "us-east-1"
   });
