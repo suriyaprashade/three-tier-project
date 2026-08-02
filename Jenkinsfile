@@ -4,7 +4,7 @@ pipeline {
     environment {
         AWS_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = '754895435040'
-        APP_SERVER_IP = 'PRIVATE_IP_OF_DOCKER_SERVER'
+        APP_SERVER_IP = '3.238.247.39'
     }
 
     stages {
